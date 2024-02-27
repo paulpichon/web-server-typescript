@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 
 // * todos
 const todos = [
-    { id: 1, test: 'Buy Milk', createdAt: new Date()},
-    { id: 2, test: 'Buy Bread', createdAt: null},
-    { id: 3, test: 'Buy Butter', createdAt: new Date()},
+    { id: 1, text: 'Buy Milk', createdAt: new Date()},
+    { id: 2, text: 'Buy Bread', createdAt: null},
+    { id: 3, text: 'Buy Butter', createdAt: new Date()},
 ];
 
 // controladores
@@ -37,9 +37,21 @@ export class TodosController {
     // metodo para crear registros
     public createTodo = ( req:Request, res:Response ) => {
         // obtener el body de la peticion
-        const body = req.body;
+        const { text } = req.body;
+        // validar que text
+        if( !text ) return res.status( 400 ).json({ error: 'Text property is required'});
 
-        res.json( body );
+        // creamos el  nuevo TODO
+        const newTodo = {
+            id: todos.length + 1,
+            text: text,
+            createdAt: null
+        };
+
+        // insertar el todo al arreglo TODOS
+        todos.push( newTodo );
+        // mostrar la respuesta 
+        res.json( newTodo );
     }
 
 }
