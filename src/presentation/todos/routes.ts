@@ -21,6 +21,8 @@ export class TodoRoutes {
         router.post('/', todoController.createTodo );
         // Actualizar un registro
         router.put('/:id', todoController.updateTodo );
+        // Eliminar un registro
+        router.delete('/:id', todoController.deleteTodo );
 
 
         return router;

@@ -82,4 +82,19 @@ export class TodosController {
 
     }
 
+    // funcion para eliminar un registro
+    public deleteTodo = ( req:Request, res:Response ) => {
+        //! hacer la conevrsion de string a number: para esto se agrega + antes de req.params.id
+        const id = +req.params.id;
+        // buscar un registro por ID
+        const todo = todos.find( todo => todo.id === id );
+        // validar si existe
+        if ( !todo ) return res.status( 404 ).json({error:`Todo with id ${ id } not found`})
+        // si existe el ID, lo eliminamos
+        todos.splice( todos.indexOf(todo), 1 );
+        // mostramos la respuesta
+        res.json( todo );        
+
+    }
+
 }
