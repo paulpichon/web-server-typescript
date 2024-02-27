@@ -19,6 +19,8 @@ export class TodoRoutes {
         router.get('/:id', todoController.getTodoById );
         // crear un registro
         router.post('/', todoController.createTodo );
+        // Actualizar un registro
+        router.put('/:id', todoController.updateTodo );
 
 
         return router;
