@@ -35,6 +35,11 @@ export class Server {
     async start() {
                 
         //* middlewares
+        // parsear la info del body: 
+        // !ESTO SOLO FUNCIONA CON RAW DE POSTMAN
+        this.app.use( express.json());
+        // !Esto solo funciona con  x-www-form-urlencoded POSTMAN
+        this.app.use( express.urlencoded({ extended: true }) );
 
         // * Public folder
         this.app.use( express.static( this.publicPath ));

@@ -34,4 +34,12 @@ export class TodosController {
         
     }
 
+    // metodo para crear registros
+    public createTodo = ( req:Request, res:Response ) => {
+        // obtener el body de la peticion
+        const body = req.body;
+
+        res.json( body );
+    }
+
 }
