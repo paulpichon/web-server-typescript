@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 // postgres prisma
 import { prisma } from "../../data/postgres";
 // DTOS
-import { CreateTodoDto } from "../../domain/dtos";
+import { CreateTodoDto, UpdateTodoDto } from "../../domain/dtos";
 
 // controladores
 export class TodosController {
@@ -57,8 +57,10 @@ export class TodosController {
     public updateTodo = async ( req: Request, res: Response ) => {
         //! hacer la conevrsion de string a number: para esto se agrega + antes de req.params.id
         const id = +req.params.id;
-        // validar que el ID sea un number
-        if ( isNaN( id ) ) return res.status(400).json({ error: 'ID argument is not a number'});
+        // desestructuramos error y updateTodoDto
+        const [ error, updateTodoDto] = UpdateTodoDto.create({ ...req.body, id });
+        // si existe el error, lo mostramos
+        if ( error ) return res.status( 400 ).json({ error }); 
         // buscar el registro con el ID mandado
         const todo = await prisma.todo.findFirst({
             where: {
@@ -68,18 +70,11 @@ export class TodosController {
 
         // validar si el ID existe
         if ( !todo ) return res.status(404).json({ error: `TODO with id: ${ id } not found`});
-
-        // body
-        const { text, completedAt } = req.body;
         // actualizar registro
         const updatedTodo = await prisma.todo.update({
             where: { id },
-            data: { 
-                text,  
-                completedAt: ( completedAt ) ? new Date( completedAt ) : null 
-            }
+            data: updateTodoDto!.values //ponemos el signo de admiracion updateTodoDto!.values porque siempre esperamos que venga el valor
         });
-       
         // mostramos la respuesta
         res.json( updatedTodo );
 
